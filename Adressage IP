@@ -1,0 +1,297 @@
+#include <stdio.h>
+#include <math.h>
+
+// Mathis Vareilles / Commencé le 31/10/22, "fini" le 5/11/22 / Ce programme fait saisir une adresse IP et un masque format CIDR et calcule l'IP du réseau + convertit les 2 adresses héxadécimales en binaire.
+
+int bIP = -1; // Valeur de stockage temporaire, sert à convertir l'adresse saisie en binaire (initialisé à -1 pour la vérification de saisie).
+int bOC; // Valeur temporaire de stockage, sert à stocker l'IP saise en binaire.
+int rIP1 = 0; // Premier chiffre de l'adresse saisie.
+int rIP2 = 0; // Deuxième chiffre de l'adresse saisie.
+int rIP3 = 0; // Troisième chiffre de l'adresse saisie.
+int rIP4 = 0; // Quatrième chiffre de l'adresse saisie.
+int bOC1 = 0; // Premier octet de l'adresse saisie.
+int bOC2 = 0; // Deuxième octet de l'adresse saisie.
+int bOC3 = 0; // Troisième octet de l'adresse saisie.
+int bOC4 = 0; // Quatrième octet de l'adresse saisie.
+int rOC1 = 0; // Premier octet de l'adresse saisie.
+int rOC2 = 0; // Deuxième octet de l'adresse saisie.        Ca se répète, c'est normal: bOC1-4 sert lors de la conversion de l'IP réseau en binaire.
+int rOC3 = 0; // Troisième octet de l'adresse saisie.
+int rOC4 = 0; // Quatrième octet de l'adresse saisie.
+int nOC1 = 0; // Premier octet de l'adresse réseau.
+int nOC2 = 0; // Deuxième octet de l'adresse réseau.
+int nOC3 = 0; // Troisième octet de l'adresse réseau.
+int nOC4 = 0; // Quatrième octet de l'adresse réseau.
+int nIP1 = 0; // Premier chiffre de l'adresse saisie.
+int nIP2 = 0; // Deuxième chiffre de l'adresse saisie.
+int nIP3 = 0; // Troisième chiffre de l'adresse saisie.
+int nIP4 = 0; // Quatrième chiffre de l'adresse saisie.
+int mask = -1; // Masque du réseau (initialisé à -1 pour la vérification de saisie).
+int i; // Outil de boucle for.
+int ref; // Valeur temporaire utilisée lors de la conversion binaire -> héxa.
+
+
+int main(int agrc, char **argv) {
+
+    // Saisie de l'IP et conversion en binaire
+    /*
+     Pour simplifier la saisie et la lecture de la saisie par le programme, on rentre les 4 chiffres de l'IP séparément, et ils sont rentrés dans quatres variables différentes afin de simplifier l'affichage (même si ça complique le traitement dans les conversions)
+     A chaque chiffre saisi par l'utilisateur, on rentre la valeur dans bIP et dans bIP1-4. bIP1-4 étant manipulé plus tard et bIP étant manipulé immédiatement dans la conversion en binaire.
+     Le processus consiste à calculer la valeur de chaque bit un par un. Pour cela, on vérifie si le chiffre saisi est supérieur à la valeur du premier bit. Si c'est le cas, on met ce bit à 1 en ajoutant 10^8 si on est sur le premier bit, 10^7 pour le deuxième etc...
+     On répète cette étape pour chaque octet, pour un total de 4 conversions héxa -> binaire. On ressort de cette étape avec l'IP de base en héxa saisie par l'utilisateur et en binaire (utile pour l'affichage et le calcul de l'IP réseau).
+    */
+
+    // Premier octet / chiffre
+
+    while (bIP < 0 || bIP > 255) {
+        printf("Premiere decimale:");
+        scanf("%d", &bIP);
+    }
+    bOC = 0;
+    rIP1 = bIP;
+
+    if(bIP>=128) {
+        bIP -= 128;
+        bOC += 10000000;
+    }
+    if(bIP>=64) {
+        bIP -= 64;
+        bOC += 1000000;
+    }
+    if(bIP>=32) {
+        bIP -= 32;
+        bOC += 100000;
+    }
+    if(bIP>=16) {
+        bIP -= 16;
+        bOC += 10000;
+    }
+    if(bIP>=8) {
+        bIP -= 8;
+        bOC += 1000;
+    }
+    if(bIP>=4) {
+        bIP -= 4;
+        bOC += 100;
+    }
+    if(bIP>=2) {
+        bIP -= 2;
+        bOC += 10;
+    }
+    if(bIP>=1) {
+        bIP -= 1;
+        bOC += 1;
+    }
+    bOC1 = bOC;
+    bIP = -1;
+
+    // Deuxième octet / chiffre
+
+    while (bIP < 0 || bIP > 255) {
+        printf("\nDeuxieme decimale:");
+        scanf("%d", &bIP);
+    }
+    bOC = 0;
+    rIP2 = bIP;
+
+    if(bIP>=128) {
+        bIP -= 128;
+        bOC += 10000000;
+    }
+    if(bIP>=64) {
+        bIP -= 64;
+        bOC += 1000000;
+    }
+    if(bIP>=32) {
+        bIP -= 32;
+        bOC += 100000;
+    }
+    if(bIP>=16) {
+        bIP -= 16;
+        bOC += 10000;
+    }
+    if(bIP>=8) {
+        bIP -= 8;
+        bOC += 1000;
+    }
+    if(bIP>=4) {
+        bIP -= 4;
+        bOC += 100;
+    }
+    if(bIP>=2) {
+        bIP -= 2;
+        bOC += 10;
+    }
+    if(bIP>=1) {
+        bIP -= 1;
+        bOC += 1;
+    }
+    bOC2 = bOC;
+    bIP = -1;
+
+    // Troisième octet / chiffre
+
+    while (bIP < 0 || bIP > 255) {
+        printf("\nTroisieme decimale:");
+        scanf("%d", &bIP);
+    }
+    bOC = 0;
+    rIP3 = bIP;
+
+    if(bIP>=128) {
+        bIP -= 128;
+        bOC += 10000000;
+    }
+    if(bIP>=64) {
+        bIP -= 64;
+        bOC += 1000000;
+    }
+    if(bIP>=32) {
+        bIP -= 32;
+        bOC += 100000;
+    }
+    if(bIP>=16) {
+        bIP -= 16;
+        bOC += 10000;
+    }
+    if(bIP>=8) {
+        bIP -= 8;
+        bOC += 1000;
+    }
+    if(bIP>=4) {
+        bIP -= 4;
+        bOC += 100;
+    }
+    if(bIP>=2) {
+        bIP -= 2;
+        bOC += 10;
+    }
+    if(bIP>=1) {
+        bIP -= 1;
+        bOC += 1;
+    }
+    bOC3 = bOC;
+    bIP = -1;
+
+    // Quatrième octet / chiffre
+
+    while (bIP < 0 || bIP > 255) {
+        printf("\nQuatrieme decimale:");
+        scanf("%d", &bIP);
+    }
+    bOC = 0;
+    rIP4 = bIP;
+
+    if(bIP>=128) {
+        bIP -= 128;
+        bOC += 10000000;
+    }
+    if(bIP>=64) {
+        bIP -= 64;
+        bOC += 1000000;
+    }
+    if(bIP>=32) {
+        bIP -= 32;
+        bOC += 100000;
+    }
+    if(bIP>=16) {
+        bIP -= 16;
+        bOC += 10000;
+    }
+    if(bIP>=8) {
+        bIP -= 8;
+        bOC += 1000;
+    }
+    if(bIP>=4) {
+        bIP -= 4;
+        bOC += 100;
+    }
+    if(bIP>=2) {
+        bIP -= 2;
+        bOC += 10;
+    }
+    if(bIP>=1) {
+        bIP -= 1;
+        bOC += 1;
+    }
+    bOC4 = bOC;
+
+    rOC1 = bOC1; rOC2 = bOC2; rOC3 = bOC3; rOC4 = bOC4;
+
+    // Saisie du masque
+
+    while (mask<0 || mask>32) {
+        printf("\nMasque (format CIDR):");
+        scanf("%d", &mask);
+        i++;
+        if(i>=10) // Failsafe au cas où on rentre un char
+            mask=0;
+    }
+
+    nOC3 = 0;
+
+    // Calcul de l'IP du réseau en binaire, à partir du masque et de l'adresse saisie en binaire.
+    /*
+     Le i correspond à la position sur les 4 octets en partant de la gauche (i = 6: on est sur le 6ème bit du 1er octet, i = 25: on est sur le 2ème bit du 4ème octet).
+     En créant une boucle qui s'arrête quand i>mask, on traite chaque bit 1 par 1 jusqu'à la 'mask'ième position, le traitement étant que:
+     Si on est sur le premier octet (= si la position est comprise en 1 et 8):
+     Ligne 1: le premier octet réseau += la valeur du 'i'ième bit * 10^sa position sur l'octet en partant de la droite (= si le 'i'ème bit est un 1, on rajoute 1('i' zéros). De cette manière, l'octet est en réalité un entier, et ajouter 10^8-i revient à mettre le 'i'ème bit en partant de la gauche à 1.
+     Ligne 2: Si l'on vient d'ajouter 10^8-1 à nOC1, alors on soustrait 10^8-1 à bOC1, afin de ne pas influencer les futures vérifications. C'est une manière de "se décaler d'un cran vers la droite" dans le traitement de l'octet.
+     On répète le procédé sur chaque octet.
+    */
+
+    for (i=1; i<=mask; i++){
+        if (i>0 && i<=8){ // 1er octet
+            nOC1 += (bOC1/(int)pow(10,8-i))*pow(10,8-i);
+            bOC1 -= (bOC1/(int)pow(10,8-i)>0)?(bOC1/(int)pow(10,8-i))*pow(10,8-i):0;
+        }
+        else if (i>8 && i<=16){ // 2ème octet
+            nOC2 += (bOC2/(int)pow(10,16-i))*pow(10,16-i);
+            bOC2 -= (bOC2/(int)pow(10,16-i)>0)?(bOC2/(int)pow(10,16-i))*pow(10,16-i):0;
+        }
+        else if (i>16 && i<=24){ // Troisième octet
+            nOC3 += (bOC3/(int)pow(10,24-i)*pow(10,24-i));
+            bOC3 -= (bOC3/(int)pow(10,24-i)>0)?(bOC3/(int)pow(10,24-i))*pow(10,24-i):0;
+        }
+        else if (i>24 && i<=32){ // Quatrième octet
+            nOC4 += (bOC4/(int)pow(10,32-i))*pow(10,32-i);
+            bOC4 -= (bOC4/(int)pow(10,32-i)>0)?(bOC4/(int)pow(10,32-i))*pow(10,32-i):0;
+        }
+    }
+
+    bOC1 = nOC1; bOC2 = nOC2; bOC3 = nOC3; bOC4 = nOC4;
+
+    // Conversion de l'IP réseau en héxadécimal
+    /*
+     ref = 1 si le bit en 'i'ème position en partant de la gauche est un 1, 0 si c'est un 0
+     Ligne 2: Si le bit en 'i'ème position est un 1, on cle change en 0 pour les futurs traitements. A ce stade ce bit est déjà stocké dans ref donc il n'y a pas de problème à ce niveau-là.
+     Ligne 3: Si le bit en 'i'ème position est un 1, on ajoute à nIP1 sa valeur en héxa. Exemple: Si le bit en 1ère position est un 1, on ajoute 128 à nIP1.
+    */
+
+    for (i=0;i<32;i++){
+        if (i<=8) {
+            ref = (bOC1 / (int)pow(10,8-i));
+            bOC1 -= (bOC1/(int)pow(10,8-i)>0)?(bOC1/(int)pow(10,8-i))*pow(10,8-i):0;
+            nIP1 += (ref==1)?pow(2,(8-i)):0;
+        }
+        else if (i<=16) {
+            ref = (bOC2 / (int)pow(10,16-i));
+            bOC2 -= (bOC2/(int)pow(10,16-i)>0)?(bOC2/(int)pow(10,16-i))*pow(10,16-i):0;
+            nIP2 += (ref==1)?pow(2,(16-i)):0;
+        }
+        else if (i<=24) {
+            ref = (bOC3 / (int)pow(10,24-i));
+            bOC3 -= (bOC3/(int)pow(10,24-i)>0)?(bOC3/(int)pow(10,24-i))*pow(10,24-i):0;
+            nIP3 += (ref==1)?pow(2,(24-i)):0;
+        }
+        else if (i<=32) {
+            ref = (bOC4 / (int)pow(10,32-i));
+            bOC4 -= (bOC4/(int)pow(10,32-i)>0)?(bOC4/(int)pow(10,32-i))*pow(10,32-i):0;
+            nIP4 += (ref==1)?pow(2,(32-i)):0;
+        }
+    }
+
+    // Affichage des résultats. On rappelle l'IP saisie en l'affichant en héxa et en binaire, puis on rappelle le masque et enfin on affiche l'IP de réseau en hexa et en binaire.
+    // Pour la clarté, l'IP en héxa est affichée en affichant chaque chiffre stocké dans une variable indépendente r/nIP1-4, séparé par un point. L'IP en binaire est affcihée en affichant chaque octet stocké dans une variable indépendente r/nOC1-4, séparé par un slash.
+
+    printf("\nIP de base: %d.%d.%d.%d \n%08d / %08d / %08d / %08d \nMasque: %d \nIP de reseau: %d.%d.%d.%d \n%08d / %08d / %08d / %08d", rIP1, rIP2, rIP3, rIP4, rOC1, rOC2, rOC3, rOC4, mask, nIP1, nIP2, nIP3, nIP4, nOC1, nOC2, nOC3, nOC4);
+}
