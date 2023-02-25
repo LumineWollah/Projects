@@ -63,7 +63,6 @@ public class sprint2 {
                         }
                     } else if (Action == 3) {
                         if (usable1 == true) {
-                        turn = false;
                         blessure = joueur1.attack(heal1);
                         joueur1.HP += blessure;
                         usable2 = false;
@@ -240,7 +239,6 @@ public class sprint2 {
                     }
                 } else if (Action == 3) {
                     if (usable1 == true) {
-                    turn = false;
                     blessure = joueur1.attack(heal1);
                     joueur1.HP += blessure;
                     usable1 = false;
